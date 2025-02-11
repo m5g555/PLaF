@@ -80,21 +80,40 @@ let rec new_kb kb word idx =
   ) else (kb)
 
 
-let fill_in_the_blanks blanks word =
-	(* TODO *)
-  let correct_word_list = string_to_list state.the_word in
+let headLetter l = 
+  match l with
+    | [] -> "".[0]
+    | h::t -> h
+
+let tail l =
+  match l with
+    | [] -> []
+    | h::t -> t
+
+let rec filled_list l word = match l with
+  | [] -> []
+  | h::t -> (if h=(headLetter (string_to_list (word))) 
+    then (h::filled_list (t) (String.sub word 1 ((String.length word)-1))) 
+      else ("_".[0]::filled_list (t) (String.sub word 1 ((String.length word)-1))))
+
+let rec combine_blanks blanks correct = match blanks with
+  | [] -> []
+  | h::t -> if (h="_".[0]) 
+      then (headLetter correct)::combine_blanks (tail blanks) (tail correct)
+      else h::combine_blanks (tail blanks) (tail correct) 
+
+
+let rec fill_in_the_blanks blanks word =
   let previous_letters_list = string_to_list blanks in
   let guess_letters_list = string_to_list word in
+  let correct_letters = filled_list guess_letters_list word in
 
-  List.iter2 (fun a b)correct_word_list guess_letters_list
-
-	raise (Failure "Not Implemented")
+  String.of_seq (List.to_seq(combine_blanks previous_letters_list (filled_list guess_letters_list word)))
 
 
 let rm_dup strlst = 
 	(* TODO *)
-	raise (Failure "Not Implemented")
-
+  raise (Failure "Not Implemented")
 
 let get_good_letters word =
 	(* TODO *)
