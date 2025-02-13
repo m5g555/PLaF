@@ -112,8 +112,8 @@ let rec fill_in_the_blanks blanks word =
 
 
 let rm_dup strlst = 
-	(* TODO *)
-  raise (Failure "Not Implemented")
+  (* Does this count as using recursion? I would think so but I have no idea how to do this otherwise *)
+  List.fold_left (fun a b -> if List.mem b a then a else b::a) [] strlst
 
 let get_good_letters word =
 	(* TODO *)
